@@ -1,0 +1,67 @@
+name: CI - Build Java 21
+
+on:
+  # Executa automaticamente quando houver um push
+  # para alguma das branches abaixo.
+  push:
+    branches:
+      - main
+      - develop
+
+  # Também executa quando alguém criar ou atualizar
+  # um Pull Request direcionado para essas branches.
+  pull_request:
+    branches:
+      - main
+      - develop
+
+  # Permite executar a pipeline manualmente pela
+  # aba "Actions" do GitHub.
+  workflow_dispatch:
+permissions:
+  contents: read
+
+
+jobs:
+  build:
+    name: Build e Testes.
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Baixar código do repositório
+        uses: actions/checkout@v7
+
+      - name: Configurar Java 21
+        uses: actions/setup-java@v6
+        with:
+          distribution: temurin
+          java-version: '21'
+          cache: maven
+
+      - name: Verificar versão do Java
+        run: java -version
+
+      - name: Verificar versão do Maven
+        run: mvn -version
+
+
+      - name: Compilar, testar e gerar artefato
+        run: mvn -B clean package
+
+      - name: Mostrar arquivos gerados
+        run: ls -lh target/
+
+
+      - name: Armazenar artefato gerado
+        uses: actions/upload-artifact@v7
+        with:
+
+          # Nome que aparecerá no GitHub Actions.
+          name: devops
+
+          # Local onde o Maven gera os arquivos .jar.
+          path: target/*.jar
+
+          # Se nenhum .jar for encontrado, queremos que
+          # a pipeline falhe em vez de apenas mostrar warning.
+          if-no-files-found: error
