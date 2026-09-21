@@ -48,10 +48,22 @@ A regra mais importante:
 
 Este projeto e uma API Spring Boot simples com Java 21 e Maven.
 
-Endpoint disponivel:
+Endpoints disponiveis:
 
 ```text
 GET /status
+POST /releases/validate
+```
+
+Exemplo de validacao de uma release:
+
+```json
+{
+  "commit": "abc1234",
+  "javaVersion": 21,
+  "unitTestsPassed": true,
+  "integrationTestsPassed": false
+}
 ```
 
 Comandos uteis:
@@ -72,15 +84,15 @@ No Windows PowerShell:
 .\mvnw.cmd package -DskipTests
 ```
 
-Os testes unitarios ficam em `src/test/java/com/devops/api` e verificam as regras da mensagem, a resposta do controller, o formato do timestamp e o comportamento do record. Eles devem ser executados rapidamente durante o desenvolvimento.
+Os testes unitarios ficam em `src/test/java/com/devops/api` e verificam as regras de validacao de uma release, a mensagem de status, a resposta do controller, o formato do timestamp e o comportamento dos records. Eles devem ser executados rapidamente durante o desenvolvimento.
 
-O teste `StatusControllerIT` sobe a aplicacao e chama a API de verdade. Ele representa uma verificacao de integracao e por isso e executado na fase `verify`.
+Os testes com sufixo `IT` sobem a aplicacao e chamam a API de verdade. Eles representam verificacoes de integracao e por isso sao executados na fase `verify`.
 
 ## Ponto de partida
 
 A pipeline inicial esta em `.github/workflows/ci.yaml`.
 
-Ela compila a aplicacao, executa testes unitarios, gera o JAR e publica o artefato no GitHub Actions.
+Ela compila a aplicacao, gera o JAR sem executar os testes e publica o artefato no GitHub Actions.
 
 Ela e propositalmente simples para provocar a discussao:
 
