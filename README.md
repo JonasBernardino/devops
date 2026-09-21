@@ -38,7 +38,7 @@ Cada grupo deve apresentar:
 2. As regras do processo.
 3. Um YAML da pipeline.
 4. Uma justificativa curta para as decisoes mais importantes.
-5. Uma apresentacao oral de 3 a 5 minutos.
+5. Uma apresentacao oral de 8 a 10 minutos.
 
 A regra mais importante:
 
