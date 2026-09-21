@@ -1,60 +1,31 @@
-name: CI - Java 21
+name: CI
 
 on:
   push:
-    branches:
-      - main
-      - develop
-
-  pull_request:
-    branches:
-      - main
-      - develop
-
-  workflow_dispatch:
-
-permissions:
-  contents: read
+    branches: [ main, develop ]
 
 jobs:
   build:
-    name: Build, Testes e Artefato
     runs-on: ubuntu-latest
 
     steps:
-      # Baixa o codigo do repositorio para o runner.
-      - name: Checkout do codigo
+      - name: Checkout
         uses: actions/checkout@v4
 
-      # Configura o ambiente com Java 21.
-      - name: Configurar Java 21
+      - name: Configurar Java
         uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: '21'
-          cache: maven
 
-      # Compila a aplicacao.
-      - name: Compilar aplicacao
+      - name: Compilar
         run: mvn -B clean compile
 
-      # Executa somente testes unitarios.
-      # Se algum teste falhar, o job e interrompido.
-      - name: Executar testes unitarios
-        run: mvn -B test
-
-      # Gera o JAR sem executar os testes novamente.
       - name: Gerar JAR
         run: mvn -B package -DskipTests
 
-      # Exibe o conteudo gerado.
-      - name: Mostrar artefatos gerados
-        run: ls -lh target/
-
-      # Armazena o JAR no GitHub Actions.
       - name: Publicar artefato
         uses: actions/upload-artifact@v4
         with:
-          name: api-comite-ci-${{ github.sha }}
+          name: api
           path: target/*.jar
-          if-no-files-found: error
